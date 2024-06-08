@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Cron Schedule</title>
+</head>
+<body>
+<h1>Update Cron Schedule</h1>
+<form id="cronForm">
+    <label for="schedule">New Cron Schedule:</label>
+    <input type="text" id="schedule" name="schedule" placeholder="0 21 * * *">
+    <button type="submit">Update Schedule</button>
+</form>
+
+<script>
+    document.getElementById('cronForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const schedule = document.getElementById('schedule').value;
+
+        (async function updateCron() {
+            try {
+                const response = await fetch('http://localhost:8000/update-cron', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cron_interval:schedule }),
+                });
+
+                if (response.ok) {
+                    alert('Cron schedule updated successfully!');
+                } else {
+                    alert('Failed to update cron schedule.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error updating cron schedule.');
+            }
+        })();
+    });
+</script>
+</body>
+</html>
